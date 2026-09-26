@@ -1,0 +1,20 @@
+# ---- Core retrieval stack (production path) ----
+rank-bm25>=0.2.2               # lexical BM25Okapi
+sentence-transformers>=2.2.2  # semantic embeddings (all-MiniLM-L6-v2)
+faiss-cpu>=1.7.4              # vector ANN index (IndexFlatIP)
+numpy>=1.24
+scikit-learn>=1.3             # offline fallback embedder (TF-IDF + SVD)
+
+# ---- Optional: token-accurate chunk sizing ----
+tiktoken>=0.5                # if absent, a word-count heuristic is used
+
+# ---- Optional: LLM synthesis providers (install what you use) ----
+anthropic>=0.39              # Claude synthesis  (--provider anthropic)
+openai>=1.30                 # OpenAI SDK; also drives Google Gemini and any
+                             # OpenAI-compatible endpoint (--provider gemini / openai)
+
+# NOTE: every heavy dependency has a graceful fallback (see htb_rag/backends.py
+# and htb_rag/indexing.py). The pipeline runs end-to-end with only numpy +
+# scikit-learn installed, using pure-python BM25 and a TF-IDF+SVD embedder,
+# which is handy for CI / air-gapped environments. Install the full stack above
+# for production-quality retrieval.
